@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:nav/home.dart';
+import 'dart:js';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,6 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -32,11 +37,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String _user = "";
+  String _pass = "";
+  var _controllerusername = TextEditingController();
+  var _controllerpassword = TextEditingController();
 
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
+  }
+
+  void _clearInputs() {
+    setState(() {});
   }
 
   @override
@@ -52,33 +65,48 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const TextField(
+              TextField(
                 textAlign: TextAlign.center,
+                onChanged: (value) {
+                  _user = value;
+                },
+                controller: _controllerusername,
+                autofocus: true,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(
-                    top: 20,
-                    bottom: 20
-                  )
+                  contentPadding: EdgeInsets.only(top: 20, bottom: 20),
                 ),
               ),
-              const TextField(
+              TextField(
                 textAlign: TextAlign.center,
                 keyboardType: TextInputType.text,
+                controller: _controllerpassword,
                 obscureText: true,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(
-                    top: 20,
-                    bottom: 20
-                  )
-                ),
+                    contentPadding: EdgeInsets.only(top: 20, bottom: 20)),
+                onChanged: (value) {
+                  _pass = value;
+                },
               ),
               ElevatedButton(
                   onPressed: () async {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const Home()));
+                    final pref = await SharedPreferences.getInstance();
+
+                    pref.setString('_user', _user);
+                    pref.setBool('_session', true);
+
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Home(activeuser: _user)));
                   },
-                  child: const Text("Iniciar sesion"))
+                  child: const Text("Iniciar sesion")),
+              ElevatedButton(
+                  onPressed: () async {
+                    _controllerusername.clear();
+                    _controllerpassword.clear();
+                  },
+                  child: const Text("Cancelar")),
             ],
           ),
         ),
