@@ -52,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,10 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     pref.setString('_user', _user);
                     pref.setBool('_session', true);
 
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Home(activeuser: _user)));
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Home()));
                   },
                   child: const Text("Iniciar sesion")),
               ElevatedButton(
