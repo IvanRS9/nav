@@ -39,6 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String _user = "";
   String _pass = "";
+
   var _controllerusername = TextEditingController();
   var _controllerpassword = TextEditingController();
 
@@ -52,7 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,51 +61,83 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(160),
+        padding: const EdgeInsets.all(200),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              TextField(
-                textAlign: TextAlign.center,
-                onChanged: (value) {
-                  _user = value;
-                },
-                controller: _controllerusername,
-                autofocus: true,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(top: 20, bottom: 20),
+              Container(
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: Column(
+                    children: <Widget>[
+                      TextField(
+                        textAlign: TextAlign.center,
+                        onChanged: (value) {
+                          _user = value;
+                        },
+                        controller: _controllerusername,
+                        autofocus: true,
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.only(top: 20, bottom: 20),
+                          hintText: "Usuario",
+                        ),
+                      ),
+                      TextField(
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.text,
+                        controller: _controllerpassword,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                            contentPadding:
+                                EdgeInsets.only(top: 20, bottom: 20),
+                            hintText: "Contraseña"),
+                        onChanged: (value) {
+                          _pass = value;
+                        },
+                      ),
+                    ],
+                  )),
+              // Alinear los botones en una fila
+              Container(
+                margin: const EdgeInsets.only(top: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () async {
+                          final pref = await SharedPreferences.getInstance();
+
+                          pref.setString('_user', _user);
+                          pref.setBool('_session', true);
+
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) => Home()));
+                        },
+                        child: const Text(
+                          "Iniciar sesion",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurpleAccent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                        )),
+                    ElevatedButton(
+                      onPressed: () async {
+                        _controllerusername.clear();
+                        _controllerpassword.clear();
+                      },
+                      child: const Text("Cancelar",
+                          style: TextStyle(color: Colors.white)),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5))),
+                    ),
+                  ],
                 ),
               ),
-              TextField(
-                textAlign: TextAlign.center,
-                keyboardType: TextInputType.text,
-                controller: _controllerpassword,
-                obscureText: true,
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(top: 20, bottom: 20)),
-                onChanged: (value) {
-                  _pass = value;
-                },
-              ),
-              ElevatedButton(
-                  onPressed: () async {
-                    final pref = await SharedPreferences.getInstance();
-
-                    pref.setString('_user', _user);
-                    pref.setBool('_session', true);
-
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => Home()));
-                  },
-                  child: const Text("Iniciar sesion")),
-              ElevatedButton(
-                  onPressed: () async {
-                    _controllerusername.clear();
-                    _controllerpassword.clear();
-                  },
-                  child: const Text("Cancelar")),
             ],
           ),
         ),

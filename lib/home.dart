@@ -38,22 +38,49 @@ class _HomeState extends State<Home> {
         child: Center(
           child: Column(
             children: <Widget>[
-              Text('Bienvenido $_usuario'),
-              ElevatedButton(
-                  onPressed: () async {
-                    final prefs = await SharedPreferences.getInstance();
-                    prefs.clear();
+              Container(
+                margin: const EdgeInsets.only(top: 50, bottom: 30),
+                child: Text('Bienvenido $_usuario a la aplicación de Flutter'),
+                //
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ElevatedButton(
+                        onPressed: () async {
+                          final prefs = await SharedPreferences.getInstance();
+                          prefs.clear();
 
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()));
-                  },
-                  child: Text("Cerrar Sesión")),
-              ElevatedButton(
-                  onPressed: () async {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Info()));
-                  },
-                  child: Text("Modificar"))
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => MyApp()));
+                        },
+                        child: Text(
+                          "Cerrar Sesión",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)))),
+                    ElevatedButton(
+                        onPressed: () async {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Info()));
+                        },
+                        child: Text(
+                          "Modificar",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurpleAccent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                        ))
+                  ],
+                ),
+              ),
             ],
           ),
         ),
