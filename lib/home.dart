@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
                           final prefs = await SharedPreferences.getInstance();
                           prefs.clear();
 
-                          Navigator.push(context,
+                          Navigator.pushReplacement(context,
                               MaterialPageRoute(builder: (context) => MyApp()));
                         },
                         child: Text(

@@ -34,15 +34,17 @@ class _InfoState extends State<Info> {
     await prefs.setString('_user', _value.text);
     ScaffoldMessenger.of(context)
         .showSnackBar(
-          SnackBar(
-            content: Text('Información guardada'),
-            duration: Duration(seconds: 3),
+          const SnackBar(
+            content: Text('Se modificó la información del usuario'),
+            duration: Duration(seconds: 2),
           ),
         )
         .closed
         .then((SnackBarClosedReason reason) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Home()));
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+          (Route route) => false);
     });
   }
 
@@ -56,23 +58,44 @@ class _InfoState extends State<Info> {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text("Información del usuario"),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                autofocus: true,
-                controller: _value,
+      body: Padding(
+        padding: const EdgeInsets.all(200),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(top: 20, bottom: 20),
+                child: Column(
+                  children: <Widget>[
+                    const Text("Información del usuario"),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TextField(
+                        autofocus: true,
+                        controller: _value,
+                        textAlign: TextAlign.center,
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.only(top: 20, bottom: 20),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: _saveUser,
+                      child: const Text(
+                        'Actualizar',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurpleAccent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5))),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: _saveUser,
-              child: Text('Guardar'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
